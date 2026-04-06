@@ -33,8 +33,9 @@ type Bin struct {
 }
 
 type Collection struct {
-	Date string `json:"date"` // YYYY-MM-DD
-	Bins []Bin  `json:"bins"`
+	Date    string `json:"date"`
+	Bins    []Bin  `json:"bins"`
+	Display string `json:"display"` // pre-formatted emoji string, e.g. "🟢 Green · 🔵 Blue"
 }
 
 type Response struct {
@@ -51,6 +52,25 @@ type cacheEntry struct {
 }
 
 var cache sync.Map
+
+func binEmoji(color string) string {
+	switch color {
+	case "green":
+		return "🟢"
+	case "blue":
+		return "🔵"
+	case "black":
+		return "⚫"
+	case "brown":
+		return "🟤"
+	case "orange":
+		return "🟠"
+	case "grey":
+		return "🔘"
+	default:
+		return "🗑️"
+	}
+}
 
 func binColor(summary string) string {
 	s := strings.ToLower(summary)
@@ -117,8 +137,16 @@ func parseICS(r io.Reader) ([]Collection, time.Time) {
 
 	collections := make([]Collection, 0, len(dates))
 	for _, d := range dates {
-		formatted := fmt.Sprintf("%s-%s-%s", d[0:4], d[4:6], d[6:8])
-		collections = append(collections, Collection{Date: formatted, Bins: byDate[d]})
+		bins := byDate[d]
+		parts := make([]string, len(bins))
+		for i, b := range bins {
+			parts[i] = binEmoji(b.Color) + " " + b.Name
+		}
+		collections = append(collections, Collection{
+			Date:    fmt.Sprintf("%s-%s-%s", d[0:4], d[4:6], d[6:8]),
+			Bins:    bins,
+			Display: strings.Join(parts, " · "),
+		})
 	}
 
 	last := dates[len(dates)-1]
