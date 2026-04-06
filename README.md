@@ -40,3 +40,51 @@ Or locally:
 ```bash
 go run .
 ```
+
+`PORT` env var overrides the default `8080`.
+
+## Homepage widget
+
+A simple example integration for [homepage](https://gethomepage.dev/) is provided below:
+
+Add to your `services.yaml`. The block display gives a compact three-field layout: relative date + one dot per bin type, remapped to emoji.
+
+```yaml
+- Bins:
+    widget:
+      type: customapi
+      url: http://wheely-cool-api:8080/collections/YOUR_HOUSE_ID
+      refreshInterval: 3600000 # 1 hour
+      mappings:
+        - field: next.date
+          label: Next collection
+          format: relativeDate
+        - field: next.bins.0.color
+          label: First bin
+          format: text
+          remap:
+            - value: green
+              to: "🟢 Green"
+            - value: blue
+              to: "🔵 Blue"
+            - value: black
+              to: "⚫ Black"
+            - value: brown
+              to: "🟤 Brown"
+            - any: true
+              to: "🗑️"
+        - field: next.bins.1.color
+          label: Second bin
+          format: text
+          remap:
+            - value: green
+              to: "🟢 Green"
+            - value: blue
+              to: "🔵 Blue"
+            - value: black
+              to: "⚫ Black"
+            - value: brown
+              to: "🟤 Brown"
+            - any: true
+              to: "🗑️"
+```
