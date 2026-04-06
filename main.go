@@ -35,7 +35,7 @@ type Bin struct {
 type Collection struct {
 	Date    string `json:"date"`
 	Bins    []Bin  `json:"bins"`
-	Display string `json:"display"` // pre-formatted emoji string, e.g. "🟢 Green · 🔵 Blue"
+	Display string `json:"display"` // pre-formatted emoji string, e.g. "🟢 · 🔵"
 }
 
 type Response struct {
@@ -140,7 +140,7 @@ func parseICS(r io.Reader) ([]Collection, time.Time) {
 		bins := byDate[d]
 		parts := make([]string, len(bins))
 		for i, b := range bins {
-			parts[i] = binEmoji(b.Color) + " " + b.Name
+			parts[i] = binEmoji(b.Color)
 		}
 		collections = append(collections, Collection{
 			Date:    fmt.Sprintf("%s-%s-%s", d[0:4], d[4:6], d[6:8]),
