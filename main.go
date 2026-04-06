@@ -11,6 +11,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	_ "time/tzdata"
 )
 
 const icsBaseURL = "https://servicelayer3c.azure-api.net/wastecalendar/calendar/ical/%s"
