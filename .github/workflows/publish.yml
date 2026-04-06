@@ -33,4 +33,4 @@ jobs:
             linux/amd64
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}-api:latest
+          tags: ghcr.io/${{ github.repository }}:latest
