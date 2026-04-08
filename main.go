@@ -145,7 +145,7 @@ func parseICS(r io.Reader) ([]Collection, time.Time) {
 		collections = append(collections, Collection{
 			Date:    fmt.Sprintf("%s-%s-%s", d[0:4], d[4:6], d[6:8]),
 			Bins:    bins,
-			Display: strings.Join(parts, " · "),
+			Display: strings.Join(parts, " · dskjfjsjhdshj "),
 		})
 	}
 
