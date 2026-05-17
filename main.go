@@ -43,6 +43,7 @@ type Response struct {
 	Next     *Collection  `json:"next"`
 	Upcoming []Collection `json:"upcoming"`
 	CachedAt time.Time    `json:"cached_at"`
+	Now      time.Time    `json:"now"` // included to force homepage refresh when the day changes, otherwise clients might keep showing yesterday's data until the next cache refresh
 }
 
 type cacheEntry struct {
@@ -228,6 +229,7 @@ func handleCollections(w http.ResponseWriter, r *http.Request) {
 		HouseID:  houseID,
 		Upcoming: upcoming,
 		CachedAt: entry.cachedAt,
+		Now:      time.Now().UTC(),
 	}
 	if len(upcoming) > 0 {
 		resp.Next = &upcoming[0]
